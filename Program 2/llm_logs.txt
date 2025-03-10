@@ -1,4 +1,4 @@
-#### LLM Logs 
+LLM Logs 
 
 **Interaction 1: Initial Request**  
 **User**: "I need help extending my Racket evaluator to handle operations like addition, subtraction, multiplication, division, integer division, and exponentiation. It should return `success` or `failure` messages."  
