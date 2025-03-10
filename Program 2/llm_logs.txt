@@ -1,1 +1,72 @@
+### LLM Logs and Commentary
+
+#### LLM Logs (llm_logs.txt)
+
+**Interaction 1: Initial Request**  
+**User**: "I need help extending my Racket evaluator to handle operations like addition, subtraction, multiplication, division, integer division, and exponentiation. It should return `success` or `failure` messages."  
+**LLM Response**: "Here's an updated version of your evaluator that uses `success` and `failure` for results."
+
+```racket
 #lang racket
+(define (success value) (list 'success value))
+(define (failure messages) (list 'failure messages))
+
+(define (eval-expr expr)
+  (match expr
+    [(list 'num n) (success n)]
+    [(list 'add (list 'num a) (list 'num b)) (success (+ a b))]
+    [(list 'sub (list 'num a) (list 'num b)) (success (- a b))]
+    [(list 'mul (list 'num a) (list 'num b)) (success (* a b))]
+    [(list 'div (list 'num a) (list 'num b)) 
+      (if (= b 0) (failure '("Division by zero")) (success (/ a b)))]
+    [(list 'num-div (list 'num a) (list 'num b)) 
+      (if (= b 0) (failure '("Integer division by zero")) (success (quotient a b)))]
+    [(list 'pow (list 'num a) (list 'num b)) (success (expt a b))]  ;; Handling exponentiation
+    [_ (failure '("Invalid expression"))]))
+```
+
+**Interaction 2: Edge Case Clarification**  
+**User**: "Could you modify the code to handle 0^0 and multiplication by 1 or 0?"  
+**LLM Response**: "Sure! Here's the updated version with special cases for multiplication and exponentiation."
+
+```racket
+(define (eval-expr expr)
+  (match expr
+    [(list 'num n) (success n)]
+    [(list 'add (list 'num a) (list 'num b)) (success (+ a b))]
+    [(list 'mul (list 'num a) (list 'num b)) 
+     (cond [(= a 0) (success 0)]
+           [(= a 1) (success b)]
+           [(= b 1) (success a)]
+           [else (success (* a b))])]
+    [(list 'pow (list 'num a) (list 'num b)) 
+     (cond [(and (= a 0) (= b 0)) (success 0)]
+           [(= b 0) (success 1)]
+           [(= a 0) (success 0)]
+           [else (success (expt a b))])]
+    [_ (failure '("Invalid expression"))]))
+```
+
+**Interaction 3: Error Handling**  
+**User**: "How can I add specific error messages for cases like division by zero?"  
+**LLM Response**: "Here’s how to include detailed error messages in the failure cases."
+
+```racket
+(define (eval-expr expr)
+  (match expr
+    [(list 'num n) (success n)]
+    [(list 'div (list 'num a) (list 'num b)) 
+      (if (= b 0) (failure '("Error: Division by zero")) (success (/ a b)))]
+    [_ (failure '("Invalid expression"))]))
+```
+
+**Final Code Testing**  
+**User**: "Can you test the evaluator?"  
+**LLM Response**: "Here are the test cases."
+
+```racket
+(displayln (eval-expr '(add (num 3) (num 5))))  ;; Expected: (success 8)
+(displayln (eval-expr '(div (num 5) (num 0))))  ;; Expected: (failure ("Error: Division by zero"))
+```
+
+**User**: "The code looks good, and the LLM was helpful in refining error handling and edge cases."
