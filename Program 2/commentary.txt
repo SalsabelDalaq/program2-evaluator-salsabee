@@ -1,13 +1,13 @@
 Commentary
 
-**Process Overview**:  
+Process Overview:  
 The task involved extending a simple Racket evaluator to handle a range of operations including addition, subtraction, multiplication, division, integer division, and exponentiation. The evaluator returns results using `success` and `failure` to distinguish between valid results and errors.
 
-**Interaction with the LLM**:  
+Interaction with the LLM:  
 The LLM provided helpful suggestions in handling edge cases and implementing specific error messages. Each interaction involved refining the code with additional checks (e.g., handling division by zero) and implementing special case handling for operations like exponentiation.
 
-**Challenges**:  
+Challenges:  
 One of the main challenges was implementing custom error messages and ensuring the evaluator handled edge cases like 0^0 and multiplication by 0 and 1 properly.
 
-**Outcome**:  
+Outcome:  
 The final evaluator works as expected, correctly handling both basic and edge cases. The LLM was instrumental in refining the logic, especially with regards to error handling and adding detailed failure messages.
